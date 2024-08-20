@@ -532,12 +532,28 @@ const generateKeyfile = (pair, point, revision) => {
   const ring = createRing(pair)
   const bnsec = new BigInteger(ring, 16)
 
+  // solaris-compatible noun of [ [1 0] <point> [ <revision> <ring> ] 0 ]
   const sed = noun.dwim(
+    noun.dwim(
+      noun.Atom.fromInt(1),
+      noun.Atom.fromInt(0)
+    ),
     noun.Atom.fromInt(point),
-    noun.Atom.fromInt(revision),
-    noun.Atom.fromString(bnsec.toString()),
-    noun.Atom.yes
-  )
+    noun.dwim(
+      noun.dwim(
+        noun.Atom.fromInt(revision),
+        noun.Atom.fromString(bnsec.toString())
+      )
+    ),
+    noun.Atom.fromInt(0)
+  );
+  // original: 
+  //const sed = noun.dwim(
+  //  noun.Atom.fromInt(point),
+  //  noun.Atom.fromInt(revision),
+  //  noun.Atom.fromString(bnsec.toString()),
+  //  noun.Atom.yes
+  //)
 
   return b64(jam(sed))
 }
