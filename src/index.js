@@ -532,7 +532,8 @@ const generateKeyfile = (pair, point, revision) => {
   const ring = createRing(pair)
   const bnsec = new BigInteger(ring, 16)
 
-  // solaris-compatible noun of [ [1 0] <point> [ <revision> <ring> ] 0 ]
+  // solaris-compatible multikey noun of [ [1 0] <point> [ <revision> <ring> ] 0 ]
+  // this can be a list of revision/rings but we are just doing one to match solaris output
   const sed = noun.dwim(
     noun.dwim(
       noun.Atom.fromInt(1),
